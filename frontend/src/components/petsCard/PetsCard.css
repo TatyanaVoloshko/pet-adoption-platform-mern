@@ -1,0 +1,85 @@
+.Cards {
+    padding: 20px; 
+}
+
+.Cards-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+   justify-content: center;
+}
+
+.Cards-list-li {
+     width: 300px;
+  text-align: center;
+    box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
+  border-radius: 5px;
+  padding: 25px;
+}
+
+.Cards-list-li:hover,
+.Cards-list-li:focus {
+  box-shadow: 0px 1px 6px rgba(220, 125, 77, 0.08), 0px 1px 1px rgba(220, 125, 77, 0.30), 0px 2px 1px rgba(220, 125, 77); 
+}
+
+.Img {
+    width: 250px;
+     height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
+margin-bottom: 20px;
+}
+
+.Card-body-list {
+    display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.Card-title {
+     color: var(--primary-color);
+  width: 700;
+  font-size: 35px;
+}
+
+.Card-list-li-bottom {
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.Card-list-btn {
+    width: 70px;
+}
+
+.Card-list-bottom {
+   width: 150px; 
+}
+
+.Description {
+     width: 100%;
+  text-align: start;
+  margin-bottom: 20px;
+}
+
+.Value {
+    color: var(--secondary-text-color);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.Property {
+    color: grey;
+  font-size: 14px;
+}
+
+.See-more {
+    font-size: 18px;
+  font-weight: 700;
+}
