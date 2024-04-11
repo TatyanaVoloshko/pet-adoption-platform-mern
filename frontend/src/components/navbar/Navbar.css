@@ -30,4 +30,13 @@
      color: var(--secondary-color);
 }
 
+@media screen and (max-width: 768px) {
+  .Header {
+    font-size: 14px;
+  }
+
+.Logo-img {
+  width: 50px;
+}
+}
 

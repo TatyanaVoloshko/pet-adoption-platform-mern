@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom"
 import './PetsCard.css'
 import defaultImage from "../../images/Logo.png";
+import { usePetsContext } from "../../hooks/usePetsContext";
 
 
 export const PetsCard = () => {
-  const [pets, setPets] = useState(null);
+  // const [pets, setPets] = useState(null);
+  const { pets, dispatch} = usePetsContext()
 
   const handleImageError = (event) => {
     event.target.src = defaultImage; 
@@ -16,12 +19,13 @@ export const PetsCard = () => {
       const json = await response.json();
 
       if (response.ok) {
-        setPets(json);
+        // setPets(json);
+        dispatch({type: 'SET_PETS', payload: json})
       }
     };
 
     fetchPets();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="Cards">
@@ -68,9 +72,7 @@ export const PetsCard = () => {
                   </div>
                 </div>
                 <div className="See-more">
-                  <a href="/home/fullPetCards/<%= pets[i]._id %>">
-                    see more...
-                  </a>
+                  <Link to={`/api/pets/${pet._id}`}>see more...</Link>
                 </div>
               </div>
             </li>
