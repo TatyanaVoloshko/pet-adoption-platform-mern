@@ -49,6 +49,8 @@ export const PetForm = () => {
     } else {
         history('/')
     }
+    
+
     if (response.ok) {
       setName("");
       setBreed("");
@@ -176,7 +178,8 @@ export const PetForm = () => {
       </div>
 
       <button className="btn">Submit</button>
-      {error && <div className="Error">{error}</div>}
+      {error && <div className="error">{error}</div>}
+    
     </form>
   );
 }

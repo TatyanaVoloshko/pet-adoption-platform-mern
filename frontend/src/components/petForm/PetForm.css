@@ -29,6 +29,11 @@
     color: #866d6d
 }
 
+.input-group-text,
+.form-select {
+  width: 100%;
+}
+
 .btn {
   background-color: var(--primary-color);
   color: var(--secondary-color);
@@ -62,11 +67,15 @@
 
 @media screen and (max-width: 768px) {
   
-  /* .add-form-select {
-    width: 50%;
+    .input-group-text,
+  .add-form-select,
+  .add-form-adoption {
+    width: 300px;
   }
 
-  .add-form-adoption {
-  width: 100%;
-} */
+  
+}
+
+.error {
+    color: red;
 }
