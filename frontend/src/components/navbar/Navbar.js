@@ -6,14 +6,23 @@ import './Navbar.css'
 export const Navbar = () => {
   return (
     <header className="Header">
-      <img src={logo} alt="logo" className="Logo" width={100} />
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="">Add new pet</Link>
+      <div className="Logo">
+        <img src={logo} alt="logo" width={100} className='Logo-img'/>
+        <Link to="/" className="Link">
+          Home
+        </Link>
+        <Link to="/api/pets" className="Link">
+          Add new pet
+        </Link>
       </div>
-      <div>
-        <Link to="">Welcome User</Link>
-        <Link to=""> Log out</Link>
+      <div className="Auth">
+        <Link to="" className="Link">
+          Welcome User
+        </Link>
+        <Link to="" className="Link">
+          {" "}
+          Log out
+        </Link>
       </div>
     </header>
   );
