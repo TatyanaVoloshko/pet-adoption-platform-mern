@@ -3,63 +3,65 @@ const mongoose = require('mongoose')
 
 
 const petSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
-
-        species: {
-            type: String,
-            required: true,
-            enum: ["cat", "dog", "parrot", "fish", "insect", "other pet"],
-            index: true,
-        },
-
-        breed: String,
-
-        age: {
-            type: String,
-            required: true,
-            index: true,
-        },
-
-        color: {
-            type: String,
-            index: true,
-        },
-
-        gender: {
-            type: String,
-            enum: ["male", "female", "unknown"],
-            default: "unknown",
-        },
-
-        description: String,
-
-        photos: {
-            type: [String], // Array of S3 object keys
-            default: [],
-        },
-
-        adoptionStatus: {
-            type: String,
-            enum: ["available", "pending", "adopted"],
-            default: "available",
-        },
-
-        price: {
-            type: String
-        },
-
-        // owner: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User",
-        // },
-
-        /*deleted created_at field because mongoose has built-in timestamps*/
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
+
+    species: {
+      type: String,
+      required: true,
+      enum: ["cat", "dog", "parrot", "fish", "insect", "other pet"],
+      index: true,
+    },
+
+    breed: String,
+
+    age: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
+    color: {
+      type: String,
+      index: true,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "unknown"],
+      default: "unknown",
+    },
+
+    description: String,
+
+    photos: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Photo",
+      },
+    ],
+
+    adoptionStatus: {
+      type: String,
+      enum: ["available", "pending", "adopted"],
+      default: "available",
+    },
+
+    price: {
+      type: String,
+    },
+
+    // owner: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User",
+    // },
+
+    /*deleted created_at field because mongoose has built-in timestamps*/
+  },
+  { timestamps: true }
 );
 
 

@@ -1,5 +1,29 @@
 const Pet = require("../models/PetModel");
 const mongoose = require('mongoose')
+const { GridFSBucket } = require('mongodb')
+const fs = require('fs')
+
+const savePhotoToGridFS = async (file) => {
+  const db = mongoose.connection.db;
+  const bucket = new GridFSBucket(db);
+
+  return new Promise((resolve, reject) => {
+    const uploadStream = bucket.openUploadStream(file.originalname);
+    const readStream = fs.createReadStream(file.path);
+
+    readStream.pipe(uploadStream);
+
+    uploadStream.on("finish", () => {
+      fs.unlinkSync(file.path); // Удаляем временный файл изображения
+      resolve(uploadStream.id);
+    });
+
+    uploadStream.on("error", (error) => {
+      reject(error);
+    });
+  });
+};
+
 
 const getPets = async (req, res) => {
     const pets = await Pet.find({}).sort({ createdAt: -1 })
@@ -26,6 +50,9 @@ const getPet = async (req, res) => {
 
 
 const createPet = async (req, res) => {
+ 
+  const photosFile = req.file
+
      const {
        name,
        species,
@@ -35,7 +62,7 @@ const createPet = async (req, res) => {
        gender,
        price,
        description,
-       photos,
+      
        adoptionStatus,
        owner,
      } = req.body;
@@ -49,10 +76,17 @@ const createPet = async (req, res) => {
          gender,
          price,
          description,
-         photos,
          adoptionStatus,
          owner,
        });
+
+   
+       // Сохраняем файл изображения в MongoDB с использованием GridFS
+       const fileId = await savePhotoToGridFS(photosFile);
+
+       // Обновляем созданного питомца с ID файла изображения
+       await Pet.findByIdAndUpdate(pet._id, { $push: { photos: fileId } });
+
        res.status(200).json(pet);
      } catch (error) {
        res.status(400).json({ error: error.message });
@@ -98,5 +132,6 @@ module.exports = {
     getPet,
     createPet,
     deletePet,
-    updatePet
+  updatePet
+    
 }
