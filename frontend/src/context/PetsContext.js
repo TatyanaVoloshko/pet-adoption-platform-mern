@@ -12,6 +12,10 @@ export const petsReducer = (state, action) => {
       return {
         pets: [action.payload, ...state.pets]
       }
+    case 'DELETE_PET':
+      return {
+        pets: state.pets.filter((pet) => pet._id !== action.payload._id )
+      }
     default:
       return state
 }
@@ -22,7 +26,6 @@ export const PetsContextProvider = ({children}) => {
     pets: null
   })
 
-  // dispatch({type: 'SET_PETS', payload: [{}, {}]})
   return (
     <PetsContext.Provider value={{...state, dispatch}}>
       {children}

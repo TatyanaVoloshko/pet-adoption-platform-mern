@@ -40,6 +40,7 @@
 
 .description-full {
   min-height: 100px;
+  max-width: 400px;
   text-align: start;
   margin-bottom: 20px;
   padding: 5px;
