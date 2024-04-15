@@ -3,18 +3,18 @@ import { Link } from "react-router-dom";
 import "./PetsCard.css";
 import defaultImage from "../../images/Logo.png";
 import { usePetsContext } from "../../hooks/usePetsContext"
+import { Filter } from "../filter/Filter";
 
 
 export const PetsCard = () => {
   const { pets, dispatch } = usePetsContext();
   const [petImages, setPetImages] = useState({});
-  
+  const [filteredPets, setFilteredPets] = useState([]);
+  // const [showMessage, setShowMessage] = useState(false)
 
   const handleImageError = (event) => {
     event.target.src = defaultImage;
   };
-
-  
 
   useEffect(() => {
    
@@ -25,7 +25,6 @@ export const PetsCard = () => {
       if (response.ok) {
         dispatch({ type: "SET_PETS", payload: json });
 
-        // Fetch images for each pet
         const petImagePromises = json.map(async (pet) => {
           if (pet.photos && pet.photos[0]) {
             try {
@@ -35,7 +34,6 @@ export const PetsCard = () => {
               
             );
             
-        
             if (imageResponse.ok) {
               const imageBlob = await imageResponse.blob();
               setPetImages((prevImages) => ({
@@ -57,16 +55,49 @@ export const PetsCard = () => {
 
     fetchPets();
   }, [dispatch]);
- 
+
+  const filterPets = (filters) => {
+    const { species, breed, age, color, gender, price, adoptionStatus } = filters;
+
+    const filtered = pets.filter((pet) => {
+      const speciesMatch = species ? pet.species.toLowerCase().includes(species.toLowerCase()) : true;
+      const breedMatch = breed
+        ? pet.breed.toLowerCase().includes(breed.toLowerCase())
+        : true;
+      const ageMatch = age
+        ? pet.age.toLowerCase().includes(age.toLowerCase())
+        : true;
+      const colorMatch = color
+        ? pet.color.toLowerCase().includes(color.toLowerCase())
+        : true;
+      const genderMatch = gender
+        ? pet.gender.toLowerCase().includes(gender.toLowerCase())
+        : true;
+      const priceMatch = price
+        ? pet.price.toLowerCase().includes(price.toLowerCase())
+        : true;
+       const adoptionStatusMatch = adoptionStatus
+         ? pet.adoptionStatus
+             .toLowerCase()
+             .includes(adoptionStatus.toLowerCase())
+         : true;
+
+      return speciesMatch && breedMatch && ageMatch && colorMatch && genderMatch && priceMatch && adoptionStatusMatch
+    });
+
+    setFilteredPets(filtered);
+    // setShowMessage(true)
+    // setTimeout(() => setShowMessage(false), 10000)
+  }
+
   return (
     <div>
+      <Filter onFilter={filterPets} />
       <div className="Cards">
-        <ul className="Cards-list">
-        
-          {pets &&
-            pets.map((pet) => (
+        {pets && pets.length > 0 && (
+          <ul className="Cards-list">
+            {(filteredPets.length > 0 ? filteredPets : pets).map((pet) => (
               <li key={pet._id} className="Cards-list-li">
-               
                 <img
                   src={petImages[pet._id] || defaultImage}
                   alt="pet"
@@ -111,7 +142,8 @@ export const PetsCard = () => {
                 </div>
               </li>
             ))}
-        </ul>
+          </ul>
+        )}
       </div>
     </div>
   );
