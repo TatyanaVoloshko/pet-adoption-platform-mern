@@ -26,7 +26,6 @@ export const PetsContextProvider = ({children}) => {
     pets: null
   })
 
-  // dispatch({type: 'SET_PETS', payload: [{}, {}]})
   return (
     <PetsContext.Provider value={{...state, dispatch}}>
       {children}

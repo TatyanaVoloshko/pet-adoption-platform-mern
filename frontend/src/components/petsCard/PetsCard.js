@@ -17,6 +17,7 @@ export const PetsCard = () => {
   
 
   useEffect(() => {
+   
     const fetchPets = async () => {
       const response = await fetch("/api/pets");
       const json = await response.json();
@@ -56,16 +57,16 @@ export const PetsCard = () => {
 
     fetchPets();
   }, [dispatch]);
-
+ 
   return (
     <div>
-    
       <div className="Cards">
         <ul className="Cards-list">
-
+        
           {pets &&
             pets.map((pet) => (
               <li key={pet._id} className="Cards-list-li">
+               
                 <img
                   src={petImages[pet._id] || defaultImage}
                   alt="pet"
@@ -109,8 +110,7 @@ export const PetsCard = () => {
                   </div>
                 </div>
               </li>
-            )
-          )}
+            ))}
         </ul>
       </div>
     </div>

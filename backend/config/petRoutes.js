@@ -27,7 +27,7 @@ router.post("/", upload.single('photos'), createPet);
 
 router.delete("/:id", deletePet);
 
-router.patch("/:id", updatePet);
+router.patch("/:id", upload.single('photos'), updatePet);
 
 router.get("/photo/:photoId", async (req, res) => {
   const photoId = req.params.photoId;

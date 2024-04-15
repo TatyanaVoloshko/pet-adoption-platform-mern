@@ -1,42 +1,78 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { usePetsContext } from "../../hooks/usePetsContext";
 import defaultImage from "../../images/Logo.png";
-import './FullPetsCard.css'
+import "./FullPetsCard.css";
+
 
 export const FullPetsCard = () => {
-    const {id} = useParams()
+  
+  const { dispatch } = usePetsContext();
   const [pet, setPet] = useState({});
+  const { id } = useParams();
  
-    useEffect(() => {
+  const history = useNavigate();
+
+  const [petImage, setPetImage] = useState({});
+
+  useEffect(() => {
     const fetchPet = async () => {
       try {
-          const response = await fetch(`/api/pets/${id}`);
-          const json = await response.json();
-
+   const response = await fetch(`/api/pets/${id}`);
+        const json = await response.json();
+        
         if (response.ok) {
           setPet(json);
+          if (json.photos && json.photos[0]) {
+            const imageResponse = await fetch(
+              `/api/pets/photo/${json.photos[0]}`
+            );
+            if (imageResponse.ok) {
+              const imageBlob = await imageResponse.blob();
+              setPetImage(URL.createObjectURL(imageBlob));
+            } else {
+              console.error(
+                "Error fetching pet image:",
+                imageResponse.statusText
+              );
+            }
+          } else {
+            console.error("No photo available for pet:", json._id);
+          }
         } else {
-          console.error("Error data:", json);
+          console.error("Error fetching pet data:", json);
         }
       } catch (error) {
-        console.error("Error request:", error);
+        console.error("Error fetching pet:", error);
       }
     };
 
-    fetchPet()
+    fetchPet();
+  }, [id]);
 
-    
-    }, [id]);
-  
   const handleImageError = (event) => {
     event.target.src = defaultImage;
   };
+
+  const handleClickDelete = async () => {
+    const response = await fetch(`/api/pets/${id}`, {
+      method: "DELETE",
+    });
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: "DELETE_PET", payload: json });
+      history("/");
+    }
+  };
+
+
 
   return (
     <div className="container">
       <div className="full-card-container">
         <img
-          src={pet.photos && pet.photos[0] ? pet.photos[0] : defaultImage}
+          src={petImage || defaultImage}
           alt="pet"
           className="card-img-full"
           onError={handleImageError}
@@ -51,7 +87,9 @@ export const FullPetsCard = () => {
 
           <div className="card-list-li">
             <div className="card-full-btn">
-              <p className="value">{pet.breed ? pet.breed.slice(0, 10) : "no"}</p>
+              <p className="value">
+                {pet.breed ? pet.breed.slice(0, 10) : "no"}
+              </p>
               <p className="property">breed</p>
             </div>
             <div className="card-full-btn">
@@ -78,16 +116,13 @@ export const FullPetsCard = () => {
               <p className="property">price</p>
             </div>
           </div>
-          <form
-            action="/home/delete-pet/<%= pet.id %>"
-            method="post"
-            className="update-form"
-          >
-            <button className="btn-delete">Delete</button>
-            <a href="/home/update-petCard/<%= pet.id %>" className="btn-update">
-              Edit
-            </a>
-          </form>
+
+          <button onClick={handleClickDelete} className="btn-delete">
+            Delete
+          </button>
+          <Link to={`/api/pets/update/${id}`} className="btn-update">
+            Update
+          </Link>
         </div>
       </div>
     </div>
