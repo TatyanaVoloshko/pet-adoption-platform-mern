@@ -1,14 +1,23 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+//frontend/src/components/reg_and_login/Login.js
+import React, { useState} from 'react';
+import useAuth from '../../hooks/useAuth';
+import {useNavigate} from "react-router-dom"; //import custom useContext hook
 
 function Login() {
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
+    const [error, setError] = useState(''); // state to store error message
+    const { login } = useAuth(); // Using the useAuth hook
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        login(usernameOrEmail, password);
+        const result = await login(usernameOrEmail, password);
+        if (result) {
+            navigate("/"); //navigate home on successful login
+        } else {
+            setError('Login failed. Please check your username/email and password and try again.');
+        }
     };
 
     return (
