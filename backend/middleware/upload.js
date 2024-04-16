@@ -1,4 +1,4 @@
-// middlewares/upload.js
+//backend/middleware/upload.js
 
 // Middleware designed for handling the files upload to S3
 //  Intercepts file uploads from website form submissions,

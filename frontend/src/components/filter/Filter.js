@@ -1,3 +1,4 @@
+//frontend/src/components/filter/Filter.js
 import React, { useState } from 'react'
 
 export const Filter = ({onFilter}) => {
