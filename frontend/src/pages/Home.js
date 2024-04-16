@@ -1,3 +1,4 @@
+/* frontend/pages/Home.js */
 import React from 'react'
 import { PetsCard } from '../components/petsCard/PetsCard'
 

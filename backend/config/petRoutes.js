@@ -1,5 +1,6 @@
+//backend/config/petRoutes.js
 const express = require('express')
-const { createPet, getPets, getPet, deletePet, updatePet } = require('../constrollers/petControllers')
+const { createPet, getPets, getPet, deletePet, updatePet } = require('../controllers/petControllers')
 
 const multer = require('multer')
 const mongoose = require('mongoose')

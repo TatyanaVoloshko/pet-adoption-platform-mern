@@ -1,3 +1,4 @@
+//frontend/src/components/fullPetsCard/fullPetsCard.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { usePetsContext } from "../../hooks/usePetsContext";
