@@ -1,86 +1,153 @@
 //frontend/src/components/filter/Filter.js
 import React, { useState } from 'react'
+import './Filter.css'
 
-export const Filter = ({onFilter}) => {
-    const [filters, setFilters] = useState({
-      age: "",
-      color: "",
-      breed: "",
-      species: "",
-      gender: "",
-      adoptionStatus: "",
-      price: "",
-    })
+export const Filter = ({
+  onFilter,
+  availableColors,
+  availableAges,
+  availableBreeds,
+  availablePrices,
+  availableSpecies,
+  availableAdoptionStatus,
+  availableGender,
+}) => {
+  const [filters, setFilters] = useState({
+    age: "",
+    color: "",
+    breed: "",
+    species: "",
+    gender: "",
+    adoptionStatus: "",
+    price: "",
+  });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setFilters((prevFiltes) => ({
-            ...prevFiltes,
-            [name]: value,
-        }))
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFiltes) => ({
+      ...prevFiltes,
+      [name]: value,
+    }));
+  };
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      onFilter(filters);
-    };
-
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onFilter(filters);
+  };
 
   return (
-    <div className="filter">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="age"
-          value={filters.age}
-          onChange={handleChange}
-          placeholder="Age"
-        />
-        <input
-          type="text"
+    <div className="filter container">
+      <form onSubmit={handleSubmit} className="filter-form">
+        <select
           name="color"
+          onChange={handleChange}
           value={filters.color}
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            color
+          </option>
+          {availableColors.map((color, index) => (
+            <option key={index} value={color}>
+              {color}
+            </option>
+          ))}
+        </select>
+        <select
+          name="age"
           onChange={handleChange}
-          placeholder="Color"
-        />
-        <input
-          type="text"
+          value={filters.age}
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            age
+          </option>
+          {availableAges.map((age, index) => (
+            <option key={index} value={age}>
+              {age}
+            </option>
+          ))}
+        </select>
+        <select
           name="breed"
-          value={filters.breed}
           onChange={handleChange}
-          placeholder="Breed"
-        />
-        <input
-          type="text"
+          value={filters.age}
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            breed
+          </option>
+          {availableBreeds.map((breed, index) => (
+            <option key={index} value={breed}>
+              {breed}
+            </option>
+          ))}
+        </select>
+        <select
           name="species"
+          onChange={handleChange}
           value={filters.species}
-          onChange={handleChange}
-          placeholder="Species"
-        />
-        <input
-          type="text"
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            species
+          </option>
+          {availableSpecies.map((species, index) => (
+            <option key={index} value={species}>
+              {species}
+            </option>
+          ))}
+        </select>
+        <select
           name="gender"
+          onChange={handleChange}
           value={filters.gender}
-          onChange={handleChange}
-          placeholder="Gender"
-        />
-        <input
-          type="text"
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            gender
+          </option>
+          {availableGender.map((gender, index) => (
+            <option key={index} value={gender}>
+              {gender}
+            </option>
+          ))}
+        </select>
+
+        <select
           name="adoptionStatus"
+          onChange={handleChange}
           value={filters.adoptionStatus}
-          onChange={handleChange}
-          placeholder="Adoption Status"
-        />
-        <input
-          type="text"
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            adoption status
+          </option>
+          {availableAdoptionStatus.map((adoptionStatus, index) => (
+            <option key={index} value={adoptionStatus}>
+              {adoptionStatus}
+            </option>
+          ))}
+        </select>
+        <select
           name="price"
-          value={filters.price}
           onChange={handleChange}
-          placeholder="Price"
-        />
-        <button type="submit">Filter</button>
+          value={filters.price}
+          className="filter-input-text"
+        >
+          <option value="" disabled>
+            price
+          </option>
+          {availablePrices.map((price, index) => (
+            <option key={index} value={price}>
+              {price}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="btn-select">
+          Select
+        </button>
       </form>
     </div>
   );
-}
+};

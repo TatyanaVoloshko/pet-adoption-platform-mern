@@ -35,6 +35,10 @@
   width: 100%;
 }
 
+.file {
+  width: 50%;
+}
+
 .btn {
   background-color: var(--primary-color);
   color: var(--secondary-color);
