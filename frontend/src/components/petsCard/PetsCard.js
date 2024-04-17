@@ -11,7 +11,14 @@ export const PetsCard = () => {
   const { pets, dispatch } = usePetsContext();
   const [petImages, setPetImages] = useState({});
   const [filteredPets, setFilteredPets] = useState([]);
-  // const [showMessage, setShowMessage] = useState(false)
+  const [availableColors, setAvailableColors] = useState([]);
+  const [availableAges, setAvailableAges] = useState([]);
+  const [availableBreeds, setAvailableBreeds] = useState([]);
+  const [availablePrices, setAvailablePrices] = useState([]);
+  const [availableSpecies, setAvailableSpecies] = useState([]);
+  const [availableAdoptionStatus, setAvailableAdoptionStatus] = useState([]);
+   const [availableGender, setAvailableGender] = useState([]);
+  
 
   const handleImageError = (event) => {
     event.target.src = defaultImage;
@@ -22,6 +29,7 @@ export const PetsCard = () => {
     const fetchPets = async () => {
       const response = await fetch("/api/pets");
       const json = await response.json();
+     
 
       if (response.ok) {
         dispatch({ type: "SET_PETS", payload: json });
@@ -51,12 +59,58 @@ export const PetsCard = () => {
         });
 
         await Promise.all(petImagePromises);
+
+        const allColors = json.map(async (pet) => pet.color)
+        await Promise.all(allColors).then((resolvedColors) => {
+        const uniqueColors = Array.from(new Set(resolvedColors));
+          setAvailableColors(uniqueColors);
+          
+        })
+
+        const allAges = json.map(async (pet) => pet.age);
+        await Promise.all(allAges).then((resolvedAges) => {
+        const uniqueAges = Array.from(new Set(resolvedAges));
+        setAvailableAges(uniqueAges);
+        })
+
+        const allBreeds = json.map(async (pet) => pet.breed);
+        await Promise.all(allBreeds).then((resolvedBreeds) => {
+          const uniqueBreeds = Array.from(new Set(resolvedBreeds));
+          setAvailableBreeds(uniqueBreeds);
+        });
+
+        const allPrices = json.map(async (pet) => pet.price);
+        await Promise.all(allPrices).then((resolvedPrices) => {
+        const uniquePrices = Array.from(new Set(resolvedPrices));
+        setAvailablePrices(uniquePrices);
+        });
+
+         const allSpecies = json.map(async (pet) => pet.species);
+         await Promise.all(allSpecies).then((resolvedSpecies) => {
+           const uniqueSpecies = Array.from(new Set(resolvedSpecies));
+           setAvailableSpecies(uniqueSpecies);
+         });
+         const allAdoptionStatus = json.map(async (pet) => pet.adoptionStatus);
+         await Promise.all(allAdoptionStatus).then(
+           (resolvedAdoptionStatus) => {
+             const uniqueAdoptionStatus = Array.from(new Set(resolvedAdoptionStatus));
+             setAvailableAdoptionStatus(uniqueAdoptionStatus);
+           }
+         );
+         const allGender = json.map(async (pet) => pet.gender);
+         await Promise.all(allGender).then((resolvedGender) => {
+           const uniqueGender = Array.from(new Set(resolvedGender));
+           setAvailableGender(uniqueGender);
+         });
+
       }
+      
     };
 
     fetchPets();
+  
   }, [dispatch]);
-
+ 
   const filterPets = (filters) => {
     const { species, breed, age, color, gender, price, adoptionStatus } = filters;
 
@@ -86,14 +140,23 @@ export const PetsCard = () => {
       return speciesMatch && breedMatch && ageMatch && colorMatch && genderMatch && priceMatch && adoptionStatusMatch
     });
 
+    
     setFilteredPets(filtered);
-    // setShowMessage(true)
-    // setTimeout(() => setShowMessage(false), 10000)
-  }
+   }
 
   return (
     <div>
-      <Filter onFilter={filterPets} />
+      <Filter
+        onFilter={filterPets}
+        availableColors={availableColors}
+        availableAges={availableAges}
+        availableBreeds={availableBreeds}
+        availablePrices={availablePrices}
+        availableSpecies={availableSpecies}
+        availableAdoptionStatus={availableAdoptionStatus}
+        availableGender={availableGender}
+        
+      />
       <div className="Cards">
         {pets && pets.length > 0 && (
           <ul className="Cards-list">
@@ -108,7 +171,7 @@ export const PetsCard = () => {
                 <div className="Card-body">
                   <div className="Card-body-list">
                     <h3 className="Card-title"> {pet.name.slice(0, 10)} </h3>
-                    <p className="Value">{pet.age.slice(0, 5)}</p>
+                    <p className="Value">{pet.age.slice(0, 7)}</p>
                   </div>
                   <div className="Card-body-list">
                     <div className="Card-list-btn">

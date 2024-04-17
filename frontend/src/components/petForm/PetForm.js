@@ -161,7 +161,7 @@ export const PetForm = () => {
           type="file"
           accept="image/*"
           onChange={onInputChange}
-          className="form-control input-group-text"
+          className="form-control input-group-text file"
         />
         <button className="btn">Submit</button>
         {error && <div className="error">{error}</div>}
