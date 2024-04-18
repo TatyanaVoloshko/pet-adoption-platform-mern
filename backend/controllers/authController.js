@@ -7,11 +7,9 @@ const User = require('../models/User');
 
 exports.register = async (req, res) => {
     try {
-        const { name, username, email, password, confirmPassword } = req.body;
+        const { name, username, email, password} = req.body;
 
-        if (password !== confirmPassword) {
-            return res.status(400).send("Passwords do not match.");
-        }
+        //removed confirmPassword  check (password !== confirmPassword)
 
         const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
@@ -88,6 +86,12 @@ exports.login = async (req, res) => {
         // Send the token to the client in response body (for storing in localStorage)
         res.status(200).send({
             message: "User logged in successfully.",
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                name: user.name
+            },
             token: token
         });
     } catch (error) {
