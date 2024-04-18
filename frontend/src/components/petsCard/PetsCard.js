@@ -5,6 +5,8 @@ import "./PetsCard.css";
 import defaultImage from "../../images/Logo.png";
 import { usePetsContext } from "../../hooks/usePetsContext"
 import { Filter } from "../filter/Filter";
+import { MdFavorite } from "react-icons/md";
+import useFavorite from "../../context/FavoritePetContext";
 
 
 export const PetsCard = () => {
@@ -17,8 +19,8 @@ export const PetsCard = () => {
   const [availablePrices, setAvailablePrices] = useState([]);
   const [availableSpecies, setAvailableSpecies] = useState([]);
   const [availableAdoptionStatus, setAvailableAdoptionStatus] = useState([]);
-   const [availableGender, setAvailableGender] = useState([]);
-  
+  const [availableGender, setAvailableGender] = useState([]);
+  const { pets: petsFavs, addToFavorite, removeFromFavorite } = useFavorite();
 
   const handleImageError = (event) => {
     event.target.src = defaultImage;
@@ -142,7 +144,26 @@ export const PetsCard = () => {
 
     
     setFilteredPets(filtered);
-   }
+  }
+  
+  
+  
+  const handleFavoriteClick = (pet) => {
+    if (isInFavorite(pet)) {
+      removeFromFavorite(pet);
+    } else {
+      addToFavorite(pet);
+    }
+  };
+
+  const isInFavorite = (pet) => {
+    if (!petsFavs || petsFavs.length === 0) {
+      return false
+    }
+    
+    return petsFavs.some((favPet) => favPet._id === pet._id);
+  };
+
 
   return (
     <div>
@@ -155,13 +176,21 @@ export const PetsCard = () => {
         availableSpecies={availableSpecies}
         availableAdoptionStatus={availableAdoptionStatus}
         availableGender={availableGender}
-        
       />
       <div className="Cards">
         {pets && pets.length > 0 && (
           <ul className="Cards-list">
             {(filteredPets.length > 0 ? filteredPets : pets).map((pet) => (
               <li key={pet._id} className="Cards-list-li">
+                <div>
+                  <MdFavorite
+                    className={`Favorite ${
+                      isInFavorite(pet) ? "Favorite-selected" : ""
+                    }`}
+                    onClick={() => handleFavoriteClick(pet)}
+                  />
+                </div>
+
                 <img
                   src={petImages[pet._id] || defaultImage}
                   alt="pet"
