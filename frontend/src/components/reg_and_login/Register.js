@@ -1,6 +1,6 @@
 //frontend/src/components/reg_and_login/Register.js
 import React, { useState } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
 function Register() {
     const [name, setName] = useState('');
@@ -12,11 +12,19 @@ function Register() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log("Form Submitted", { name, username, email, password, confirmPassword });
         if (password !== confirmPassword) {
             alert("Passwords don't match");
             return;
         }
+        console.log("Attempting to register...");
         register(name, username, email, password);
+    };
+
+
+    const handleChange = (setter) => (e) => {
+        console.log("Updating field", e.target.name, "to", e.target.value); // Add field name if not present
+        setter(e.target.value);
     };
 
     return (
@@ -45,14 +53,14 @@ function Register() {
             <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleChange(setPassword)}
                 placeholder="Password"
                 required
             />
             <input
                 type="password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleChange(setConfirmPassword)}
                 placeholder="Confirm Password"
                 required
             />

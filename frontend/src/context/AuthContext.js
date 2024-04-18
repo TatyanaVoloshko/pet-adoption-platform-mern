@@ -51,22 +51,46 @@ export const AuthProvider = ({ children }) => {
     const login = async (usernameOrEmail, password) => {
         try {
             const response = await axios.post('/api/auth/login', { usernameOrEmail, password }, { withCredentials: true });
-            if (response.data.isLoggedIn) {
+            if (response.status === 200 && response.data.token) {
                 setUser(response.data.user);
                 setIsLoggedIn(true);
-                navigate('/'); // redirect after login
+                //navigate('/'); // redirect after login
+                return { success: true, data: response.data };  // return the response for additional handling outside this function (register)
             } else {
                 throw new Error('Login failed. Please try again.'); // Handle non-successful login attempts
             }
-            return true;
         } catch (error) {
             console.error('Login failed:', error);
             setError(error.response?.data || 'Login failed. Please try again.');
             setIsLoggedIn(false);
             setUser(null);
-            return false;
+            return { success: false, message: error.message || 'Login failed' }; // return error details
         }
     };
+
+
+    const register = async (name, username, email, password) => {
+        try {
+            const response = await axios.post('/api/auth/register', { name, username, email, password }, { withCredentials: true });
+            if (response.status === 201) {
+                const loginResponse = await login(username, password); // attempt to login user
+                if (loginResponse && loginResponse.data.isLoggedIn) {
+                    navigate('/'); // redirect after registration
+                } else {
+                    // Handle failed login attempt after registration
+                    alert('Registration successful, but automatic login failed: ' + loginResponse.message);
+                    navigate('/api/auth/login'); // Redirect to login page
+                }
+            } else {
+                throw new Error('Registration failed. Please try again.'); // Handle non-successful registration attempts
+            }
+        } catch (error) {
+            console.error('Registration failed:', error);
+            setError(error.response?.data || 'Registration failed. Please try again.');
+        }
+    };
+
+
 
     /*logout function
     * handles the user logout by informing the backend to invalidate the user session and
@@ -96,26 +120,6 @@ export const AuthProvider = ({ children }) => {
 
     /*-------------------------------------------------------------------------------------*/
 
-
-
-
-    const register = async (name, username, email, password) => {
-        try {
-            const response = await axios.post('/api/auth/register', { name, username, email, password }, { withCredentials: true });
-            if (response.data.isLoggedIn) {
-                setUser(response.data.user);
-                setIsLoggedIn(true);
-                navigate('/'); // redirect after registration
-            } else {
-                throw new Error('Registration failed. Please try again.'); // Handle non-successful registration attempts
-            }
-        } catch (error) {
-            console.error('Registration failed:', error);
-            setError('Registration failed. Please try again.');
-            setIsLoggedIn(false);
-            setUser(null);
-        }
-    };
 
 
 
