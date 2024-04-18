@@ -12,6 +12,13 @@ import { AuthProvider } from './context/AuthContext';
 import { FavoritePetProvider } from './context/FavoritePetContext';
 import FavoritePets from './pages/FavoritePets';
 
+import ProtectedRoute from './components/ProtectedRoute';
+
+
+
+
+
+
 function App() {
   return (
     <div className="App">
@@ -26,10 +33,10 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/api/auth/login" element={<Login />} />
                 <Route path="/api/auth/register" element={<Register />} />
-                <Route path="/api/pets/:id" element={<FullPetsCard />} />
-                <Route path="/api/pets" element={<AddNewPet />} />
-                <Route path="/api/pets/update/:id" element={<UpdatePet />} />
-                <Route path="/favorite-pets" element={<FavoritePets />} />
+                <Route path="/api/pets/:id" element={<ProtectedRoute><FullPetsCard /></ProtectedRoute>} />
+                <Route path="/api/pets" element={<ProtectedRoute><AddNewPet /></ProtectedRoute>} />
+                <Route path="/api/pets/update/:id" element={<ProtectedRoute><UpdatePet /></ProtectedRoute>} />
+                <Route path="/favorite-pets" element={<ProtectedRoute><FavoritePets /></ProtectedRoute>} />
               </Routes>
             </div>
           </FavoritePetProvider>
