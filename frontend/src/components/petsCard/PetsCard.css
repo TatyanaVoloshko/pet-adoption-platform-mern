@@ -11,6 +11,7 @@
 }
 
 .Cards-list-li {
+  position: relative;
      width: 300px;
   text-align: center;
     box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
@@ -83,4 +84,18 @@ margin-bottom: 20px;
 .See-more {
     font-size: 18px;
   font-weight: 700;
+}
+
+.Favorite {
+  position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 30px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--secondary-color);
 }

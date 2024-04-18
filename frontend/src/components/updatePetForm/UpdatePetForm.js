@@ -83,7 +83,8 @@ const UpdatePetForm = ({ pet, onSubmit }) => {
       </div>
       <div className="col-md-3 position-relative add-form-select">
         <select
-          name={updatedPetInfo.species}
+          name="species"
+          value={updatedPetInfo.species}
           onChange={handleInputChange}
           className="form-select input-group-text"
         >
@@ -96,7 +97,8 @@ const UpdatePetForm = ({ pet, onSubmit }) => {
           <option value="other pet">other pet</option>
         </select>
         <select
-          name={updatedPetInfo.gender}
+          name="gender"
+          value={updatedPetInfo.gender}
           onChange={handleInputChange}
           className="form-select input-group-text"
         >
@@ -160,7 +162,8 @@ const UpdatePetForm = ({ pet, onSubmit }) => {
       </div>
       <div className="col-md-3 position-relative add-form-adoption">
         <select
-          name={updatedPetInfo.adoptionStatus}
+          name="adoptionStatus"
+          value={updatedPetInfo.adoptionStatus}
           onChange={handleInputChange}
           className="form-select input-group-text"
         >

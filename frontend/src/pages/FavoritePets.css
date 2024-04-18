@@ -1,0 +1,17 @@
+.Favorite {
+  position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 30px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--secondary-color);
+}
+
+.Favorite-selected {
+    color: var(--primary-color);
+}
