@@ -2,6 +2,8 @@
 import React, { useState} from 'react';
 import useAuth from '../../hooks/useAuth';
 import {useNavigate} from "react-router-dom"; //import custom useContext hook
+import './Auth.css'
+
 
 function Login() {
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -21,24 +23,41 @@ function Login() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+      <div className="container container-login welcome">
+        <form onSubmit={handleSubmit} className="add-form-login">
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="text"
-                value={usernameOrEmail}
-                onChange={(e) => setUsernameOrEmail(e.target.value)}
-                placeholder="Username/Email"
-                required
+              type="text"
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              placeholder="Username/Email"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="username"
             />
+          </div>
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="current-password"
             />
-            <button type="submit">Sign In</button>
-            <p>New to the website? <span onClick={() => window.location.href = '/register'}>Click to register here</span></p>
+          </div>
+          <button type="submit" className="btn">
+            Sign In
+          </button>
+          <p className="auth-link">
+            New to the website?{" "}
+            <span onClick={() => (window.location.href = "/api/auth/register")}>
+              Sign up
+            </span>
+          </p>
         </form>
+      </div>
     );
 }
 
