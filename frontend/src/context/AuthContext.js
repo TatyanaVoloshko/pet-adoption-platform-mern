@@ -21,11 +21,10 @@ export const AuthProvider = ({ children }) => {
     const checkLoginStatus = async () => {
         try {
             const response = await axios.get('/api/auth/session-status', { withCredentials: true });
+            setIsLoggedIn(response.data.isLoggedIn); //
             if (response.data.isLoggedIn) {
                 setUser(response.data.user);
-                setIsLoggedIn(response.data.isLoggedIn);
             } else {
-                setIsLoggedIn(false);
                 setUser(null);
                 setError('Your session has expired. Please log in again.');  // User-friendly error message
             }
@@ -50,12 +49,11 @@ export const AuthProvider = ({ children }) => {
     * uses `navigate()` to redirect the user upon successful login.*/
     const login = async (usernameOrEmail, password) => {
         try {
-            const response = await axios.post('/api/auth/login', { usernameOrEmail, password }, { withCredentials: true });
-            if (response.status === 200 && response.data.token) {
-                setUser(response.data.user);
+            const loginResponse = await axios.post('/api/auth/login', { usernameOrEmail, password }, { withCredentials: true });
+            if (loginResponse.status === 200) {
                 setIsLoggedIn(true);
-                //navigate('/'); // redirect after login
-                return { success: true, data: response.data };  // return the response for additional handling outside this function (register)
+                setUser(loginResponse.data.user);
+                return { success: true, data: loginResponse.data };  // return the response for additional handling outside this function (register)
             } else {
                 throw new Error('Login failed. Please try again.'); // Handle non-successful login attempts
             }
@@ -71,25 +69,25 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (name, username, email, password) => {
         try {
-            const response = await axios.post('/api/auth/register', { name, username, email, password }, { withCredentials: true });
-            if (response.status === 201) {
-                const loginResponse = await login(username, password); // attempt to login user
-                if (loginResponse && loginResponse.data.isLoggedIn) {
-                    navigate('/'); // redirect after registration
-                } else {
-                    // Handle failed login attempt after registration
-                    alert('Registration successful, but automatic login failed: ' + loginResponse.message);
-                    navigate('/api/auth/login'); // Redirect to login page
-                }
+            const response = await axios.post('/api/auth/register', {
+                name,
+                username,
+                email,
+                password
+            }, { withCredentials: true });
+
+            if (response.data.success) {
+                setIsLoggedIn(true);
+                setUser(response.data.user);
+                navigate('/'); // Redirect to home page after successful registration
             } else {
-                throw new Error('Registration failed. Please try again.'); // Handle non-successful registration attempts
+                throw new Error(response.data.message); // Use server-provided message for error
             }
         } catch (error) {
-            console.error('Registration failed:', error);
-            setError(error.response?.data || 'Registration failed. Please try again.');
+            console.error('Registration failed:', error.message);
+            setError(error.response?.data.message || 'Registration failed. Please try again.');
         }
     };
-
 
 
     /*logout function

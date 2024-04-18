@@ -7,33 +7,58 @@ const User = require('../models/User');
 
 exports.register = async (req, res) => {
     try {
-        const { name, username, email, password} = req.body;
-
-        //removed confirmPassword  check (password !== confirmPassword)
-
+        const { name, username, email, password } = req.body;
         const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
         if (userExists) {
-            return res.status(400).send("Username or email already exists.");
+            return res.status(400).json({
+                success: false,
+                message: "Username or email already exists."
+            });
         }
 
-        // Create a new user instance without hashing the password here
-        // The password will be hashed in the User model's pre-save hook
         const user = new User({
             name,
             username,
             email,
-            password // Store the password as is; hashing is handled by the model
+            password  // Assume password will be hashed in pre-save middleware
         });
 
-        await user.save(); // The password will be hashed by the pre-save hook
-        res.status(201).send("User registered successfully.");
+        await user.save();
+
+        // Create a token directly after saving the new user
+        const token = jwt.sign(
+            { _id: user._id, username: user.username },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" }
+        );
+
+        // Send the token and user details back to the client
+        res.cookie('token', token, { httpOnly: true, sameSite: 'Strict', maxAge: 24 * 3600000 }); // 24 hours
+        res.status(201).json({
+            success: true,
+            isLoggedIn: true,
+            message: "Registration and login successful.",
+            user: {
+                id: user._id,
+                username: user.username,
+                name: user.name,
+                email: user.email
+            },
+            token
+        });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error('Registration Error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error during registration."
+        });
     }
 };
 
-exports.login = async (req, res) => {
+
+
+exports.login = async (req, res) => { // make a more generalized function instead of usual function for express that handles http requests
     try {
         const { usernameOrEmail, password } = req.body;
         /*for testing purposes: Log the usernameOrEmail being attempted*/
@@ -84,19 +109,21 @@ exports.login = async (req, res) => {
 
 
         // Send the token to the client in response body (for storing in localStorage)
-        res.status(200).send({
-            message: "User logged in successfully.",
+        return res.status(200).json({
+            success: true,
+            isLoggedIn: true,
+            message: "Login successful",
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
-                name: user.name
+                name: user.name,
+                email: user.email
             },
-            token: token
+            token
         });
     } catch (error) {
         console.error("Login error:", error); // Log any error that occurred during the process
-        res.status(500).send("An error occurred during the login process.");
+        return res.status(500).json({ error: "Internal server error during login." });
     }
 };
 
