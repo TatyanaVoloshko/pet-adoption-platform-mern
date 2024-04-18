@@ -1,7 +1,8 @@
 //frontend/src/components/fullPetsCard/fullPetsCard.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { usePetsContext } from "../../hooks/usePetsContext";
+import { AuthContext } from "../../context/AuthContext";
 import { MdFavorite } from "react-icons/md";
 import defaultImage from "../../images/Logo.png";
 import "./FullPetsCard.css";
@@ -11,6 +12,7 @@ import useFavorite from "../../context/FavoritePetContext";
 export const FullPetsCard = () => {
   
   const { dispatch } = usePetsContext();
+  const { user } = useContext(AuthContext); // Get current user from context
   const [pet, setPet] = useState({});
   const { id } = useParams();
   const { pets: petsFavs, addToFavorite, removeFromFavorite } = useFavorite();
@@ -57,6 +59,9 @@ export const FullPetsCard = () => {
   const handleImageError = (event) => {
     event.target.src = defaultImage;
   };
+
+
+  const canUpdate = user && pet.owner === user._id; // canUpdate if user is the author of the post
 
   const handleClickDelete = async () => {
     const response = await fetch(`/api/pets/${id}`, {
@@ -149,9 +154,11 @@ export const FullPetsCard = () => {
           <button onClick={handleClickDelete} className="btn-delete">
             Delete
           </button>
-          <Link to={`/api/pets/update/${id}`} className="btn-update">
-            Update
-          </Link>
+          {canUpdate && (
+            <Link to={`/api/pets/update/${id}`} className="btn-update">
+              Update
+            </Link>
+          )}
         </div>
       </div>
     </div>

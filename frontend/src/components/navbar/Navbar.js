@@ -5,7 +5,7 @@ import logo from "../../images/Logo.png"
 import './Navbar.css'
 import { AuthContext } from '../../context/AuthContext';
 export const Navbar = () => {
-    const { isLoggedIn, handleLogout } = useContext(AuthContext);
+    const { isLoggedIn, user, handleLogout } = useContext(AuthContext);
     return (
       <header className="Header">
         <div className="Logo">
@@ -22,7 +22,7 @@ export const Navbar = () => {
           {isLoggedIn ? (
             <>
               <Link to="" className="Link">
-                Welcome User
+                Welcome {user ? user.name : 'Guest'}
               </Link>
               <button
                 onClick={handleLogout}

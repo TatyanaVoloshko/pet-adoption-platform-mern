@@ -55,10 +55,10 @@ const petSchema = new mongoose.Schema(
       type: String,
     },
 
-    // owner: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "User",
-    // },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
 
     /*deleted created_at field because mongoose has built-in timestamps*/
   },

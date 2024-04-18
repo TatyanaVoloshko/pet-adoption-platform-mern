@@ -50,21 +50,22 @@ export const AuthProvider = ({ children }) => {
     const login = async (usernameOrEmail, password) => {
         try {
             const loginResponse = await axios.post('/api/auth/login', { usernameOrEmail, password }, { withCredentials: true });
-            if (loginResponse.status === 200) {
+            if (loginResponse.status === 200 && loginResponse.data.success) {
                 setIsLoggedIn(true);
                 setUser(loginResponse.data.user);
-                return { success: true, data: loginResponse.data };  // return the response for additional handling outside this function (register)
+                console.log(loginResponse.data.user);
+                navigate('/'); // Redirect to home page after successful login
             } else {
-                throw new Error('Login failed. Please try again.'); // Handle non-successful login attempts
+                throw new Error(loginResponse.data.message || 'Login failed. Please try again.'); // Use server-provided message for error
             }
         } catch (error) {
             console.error('Login failed:', error);
-            setError(error.response?.data || 'Login failed. Please try again.');
+            setError(error.response?.data.message || 'Login failed. Please try again.');
             setIsLoggedIn(false);
             setUser(null);
-            return { success: false, message: error.message || 'Login failed' }; // return error details
         }
     };
+
 
 
     const register = async (name, username, email, password) => {
