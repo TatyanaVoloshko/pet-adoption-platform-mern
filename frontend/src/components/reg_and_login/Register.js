@@ -1,6 +1,7 @@
 //frontend/src/components/reg_and_login/Register.js
 import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import "./Auth.css";
 
 function Register() {
     const [name, setName] = useState('');
@@ -28,45 +29,73 @@ function Register() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+      <div className="container container-login welcome">
+        <form onSubmit={handleSubmit} className="add-form-regist">
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-                required
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              className="form-control input-group-text-auth"
+              required
             />
+          </div>
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
-                required
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="username"
             />
+          </div>
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="email"
             />
+          </div>
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="password"
-                value={password}
-                onChange={handleChange(setPassword)}
-                placeholder="Password"
-                required
+              type="password"
+              value={password}
+              onChange={handleChange(setPassword)}
+              placeholder="Password"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="current-password"
             />
+          </div>
+          <div className="col-md-6 position-relative col-md-6-auth">
             <input
-                type="password"
-                value={confirmPassword}
-                onChange={handleChange(setConfirmPassword)}
-                placeholder="Confirm Password"
-                required
+              type="password"
+              value={confirmPassword}
+              onChange={handleChange(setConfirmPassword)}
+              placeholder="Confirm Password"
+              className="form-control input-group-text-auth"
+              required
+              autoComplete="new-password"
             />
-            <button type="submit">Register</button>
-            <p>Already have an account? <span onClick={() => window.location.href = '/login'}>Sign in</span></p>
+          </div>
+          <button type="submit" className="btn-auth">
+            Register
+          </button>
+          <p className="auth-link">
+            Already have an account?{" "}
+            <span onClick={() => (window.location.href = "/api/auth/login")}>
+              Sign in
+            </span>
+          </p>
         </form>
+      </div>
     );
 }
 

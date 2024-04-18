@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { usePetsContext } from "../../hooks/usePetsContext";
+import { MdFavorite } from "react-icons/md";
 import defaultImage from "../../images/Logo.png";
 import "./FullPetsCard.css";
+import useFavorite from "../../context/FavoritePetContext";
 
 
 export const FullPetsCard = () => {
@@ -11,6 +13,7 @@ export const FullPetsCard = () => {
   const { dispatch } = usePetsContext();
   const [pet, setPet] = useState({});
   const { id } = useParams();
+  const { pets: petsFavs, addToFavorite, removeFromFavorite } = useFavorite();
  
   const history = useNavigate();
 
@@ -67,6 +70,22 @@ export const FullPetsCard = () => {
     }
   };
 
+  const handleFavoriteClick = (pet) => {
+    if (isInFavorite(pet)) {
+      removeFromFavorite(pet);
+    } else {
+      addToFavorite(pet);
+    }
+  };
+
+  const isInFavorite = (pet) => {
+    if (!petsFavs || petsFavs.length === 0) {
+      return false;
+    }
+
+    return petsFavs.some((favPet) => favPet._id === pet._id);
+  };
+
 
 
   return (
@@ -78,7 +97,16 @@ export const FullPetsCard = () => {
           className="card-img-full"
           onError={handleImageError}
         />
+
         <div className="full-info">
+          <div className="full-favorite">
+            <MdFavorite
+              className={`favorite ${
+                isInFavorite(pet) ? "favorite-selected" : ""
+              }`}
+              onClick={() => handleFavoriteClick(pet)}
+            />
+          </div>
           <div className="card-list-li">
             <h3 className="card-title">
               {pet.name ? pet.name.slice(0, 10) : ""}
