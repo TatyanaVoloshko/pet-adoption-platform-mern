@@ -4,8 +4,6 @@ import { AuthContext } from '../context/AuthContext';
 /*^^imports the AuthContext defined, which holds authentication state and functions.*/
 
 
-const useAuth = () => {
-    return useContext(AuthContext);
-};
+const useAuth = () => useContext(AuthContext);
 
 export default useAuth;
