@@ -20,7 +20,7 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 
 // Define the route for checking session status
-router.get('/session-status', sessionController.checkSessionStatus);
+router.get('/session-status', jwtMiddleware, sessionController.checkSessionStatus);
 
 
 module.exports = router;

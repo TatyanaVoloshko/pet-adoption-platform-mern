@@ -17,6 +17,7 @@ const jwtMiddleware = (req, res, next) => {
     } catch (err) {
         return res.status(401).send("Invalid Token");
     }
+    next(); // call next() to continue to the next middleware/route handler
 };
 
 module.exports = jwtMiddleware;
