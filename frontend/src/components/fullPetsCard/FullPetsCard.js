@@ -61,7 +61,9 @@ export const FullPetsCard = () => {
   };
 
 
-  const canUpdate = user && pet.owner === user._id; // canUpdate if user is the author of the post
+  const canUserUpdatePet = () => {
+    return user && pet.owner === user._id;
+  }
 
   const handleClickDelete = async () => {
     const response = await fetch(`/api/pets/${id}`, {
@@ -154,7 +156,7 @@ export const FullPetsCard = () => {
           <button onClick={handleClickDelete} className="btn-delete">
             Delete
           </button>
-          {canUpdate && (
+          {canUserUpdatePet() && (
             <Link to={`/api/pets/update/${id}`} className="btn-update">
               Update
             </Link>
